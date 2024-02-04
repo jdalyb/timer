@@ -1,0 +1,23 @@
+library(tidyverse)
+library(officer)
+
+# set working directory
+# setwd("")
+
+#Setup
+data <- read.csv("music.csv")
+x <- 100 #how many new songs?
+n <- 5 #what block size?
+
+#listen to songs
+doc <- read_docx()
+text <- paste(sample(paste(data$"Artist.name", "-", data$"Single.title"),x),collapse="\n") %>%
+  strsplit('\n') %>%
+  unlist()
+for (t in text){
+  body_add_par(doc, t)
+  if(which(t == text) %%n == 0){
+    body_add_par(doc, "")
+  }
+}
+print(doc, target = "temp_delete.docx")
